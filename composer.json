@@ -10,6 +10,7 @@
             "email": "hrasekj@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "api": ""
