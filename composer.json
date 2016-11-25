@@ -10,7 +10,6 @@
             "email": "hrasekj@gmail.com"
         }
     ],
-    "vesion": "dev-master",
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "^2.0"
