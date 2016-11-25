@@ -10,6 +10,11 @@
             "email": "hrasekj@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "api": ""
+        }
+    },
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0.6"
