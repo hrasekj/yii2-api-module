@@ -3,10 +3,10 @@
  * @Author: Jakub Hrášek
  * @Date:   2016-11-18 15:41:22
  * @Last Modified by:   Jakub Hrášek
- * @Last Modified time: 2016-11-25 15:28:27
+ * @Last Modified time: 2016-11-26 15:41:11
  */
 
-namespace api\controllers;
+namespace hrasekj\api\controllers;
 
 
 use yii\base\InvalidConfigException;

@@ -3,10 +3,10 @@
  * @Author: Jakub Hrášek
  * @Date:   2016-11-25 12:19:51
  * @Last Modified by:   Jakub Hrášek
- * @Last Modified time: 2016-11-25 15:29:07
+ * @Last Modified time: 2016-11-26 15:41:03
  */
 
-namespace api\controllers;
+namespace hrasekj\api\controllers;
 
 
 use Yii;
