@@ -3,7 +3,7 @@
  * @Author: Jakub Hrášek
  * @Date:   2016-11-18 15:41:22
  * @Last Modified by:   Jakub Hrášek
- * @Last Modified time: 2016-11-26 15:51:10
+ * @Last Modified time: 2016-11-26 17:56:21
  */
 
 namespace api\controllers;
@@ -13,7 +13,7 @@ use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\web\ForbiddenHttpException;
 
-class ActiveController extends Controller
+abstract class ActiveController extends Controller
 {
 	/**
 	 * @var string the model class name. This property must be set.

@@ -3,7 +3,7 @@
  * @Author: Jakub Hrášek
  * @Date:   2016-11-24 03:33:47
  * @Last Modified by:   Jakub Hrášek
- * @Last Modified time: 2016-11-26 15:51:07
+ * @Last Modified time: 2016-11-26 17:56:28
  */
 
 namespace api\controllers;
@@ -17,7 +17,7 @@ use yii\filters\RateLimiter;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 
-class Controller extends \yii\rest\Controller
+abstract class Controller extends \yii\rest\Controller
 {
 	/**
 	 * @var string|array the configuration for creating the serializer that formats the response data.
