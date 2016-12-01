@@ -3,7 +3,7 @@
  * @Author: Jakub Hrášek
  * @Date:   2016-11-21 11:21:53
  * @Last Modified by:   Jakub Hrášek
- * @Last Modified time: 2016-11-30 18:45:47
+ * @Last Modified time: 2016-12-01 16:14:12
  */
 
 namespace api;
@@ -19,6 +19,12 @@ use yii\web\Response;
 
 class Module extends \yii\base\Module implements BootstrapInterface
 {
+	/**
+	 * @var string when user login session expires. Using strtotime.
+	 * @see http://php.net/manual/en/function.strtotime.php
+	 */
+	public $expirationTime = '+60 minutes';
+
 	/**
 	 * @var string the namespace that model classes are in.
 	 */
@@ -75,7 +81,6 @@ class Module extends \yii\base\Module implements BootstrapInterface
 			}
 		}
 	}
-
 
 	/**
 	 * Converts an exception into an array.
