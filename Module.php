@@ -3,7 +3,7 @@
  * @Author: Jakub Hrášek
  * @Date:   2016-11-21 11:21:53
  * @Last Modified by:   Jakub Hrášek
- * @Last Modified time: 2016-11-26 15:51:15
+ * @Last Modified time: 2016-11-30 18:45:47
  */
 
 namespace api;
@@ -12,6 +12,8 @@ namespace api;
 use Yii;
 use yii\base\BootstrapInterface;
 use yii\base\Exception;
+use yii\base\ErrorException;
+use yii\base\UserException;
 use yii\web\HttpException;
 use yii\web\Response;
 
@@ -63,35 +65,53 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
 		if ($errorHandler->exception !== null) {
 			$response->format = Response::FORMAT_JSON;
+			$response->data = $this->convertExceptionToArray($errorHandler->exception);
 
 			if ($errorHandler->exception instanceof HttpException) {
-				$data = [
-					'name' => $errorHandler->exception->getName(),
-					'message' => $errorHandler->exception->getMessage(),
-					'status' => ($statusCode = $errorHandler->exception->statusCode),
-					'code' => $errorHandler->exception->getCode(),
-				];
-			}
-			elseif ($errorHandler->exception instanceof Exception) {
-				$data = [
-					'name' => $errorHandler->exception->getName(),
-					'message' => $errorHandler->exception->getMessage(),
-					'status' => ($statusCode = 500),
-					'code' => $errorHandler->exception->getCode(),
-				];
+				$response->statusCode = $errorHandler->exception->statusCode;
 			}
 			else {
-				$data = [
-					'name' => "Fatal Error",
-					'message' => $errorHandler->exception->getMessage(),
-					'status' => ($statusCode = 500),
-					'code' => $errorHandler->exception->getCode(),
-				];
+				$response->statusCode = 500;
 			}
-
-			$response->data = $data;
-			$response->statusCode = $statusCode;
 		}
+	}
+
+
+	/**
+	 * Converts an exception into an array.
+	 * @param \Exception $exception the exception being converted
+	 * @return array the array representation of the exception.
+	 */
+	protected function convertExceptionToArray($exception)
+	{
+		if (!YII_DEBUG && !$exception instanceof UserException && !$exception instanceof HttpException) {
+			$exception = new HttpException(500, Yii::t('yii', 'An internal server error occurred.'));
+		}
+
+		$array = [
+			'name' => ($exception instanceof Exception || $exception instanceof ErrorException) ? $exception->getName() : 'Exception',
+			'message' => $exception->getMessage(),
+			'code' => $exception->getCode(),
+		];
+		if ($exception instanceof HttpException) {
+			$array['status'] = $exception->statusCode;
+		}
+		if (YII_DEBUG) {
+			$array['type'] = get_class($exception);
+			if (!$exception instanceof UserException) {
+				$array['file'] = $exception->getFile();
+				$array['line'] = $exception->getLine();
+				$array['stack-trace'] = explode("\n", $exception->getTraceAsString());
+				if ($exception instanceof \yii\db\Exception) {
+					$array['error-info'] = $exception->errorInfo;
+				}
+			}
+		}
+		if (($prev = $exception->getPrevious()) !== null) {
+			$array['previous'] = $this->convertExceptionToArray($prev);
+		}
+
+		return $array;
 	}
 
 }
