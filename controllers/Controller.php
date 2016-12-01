@@ -3,7 +3,6 @@
  * @Author: Jakub Hrášek
  * @Date:   2016-11-24 03:33:47
  * @Last Modified by:   Jakub Hrášek
- * @Last Modified time: 2016-11-26 17:56:28
  */
 
 namespace api\controllers;
