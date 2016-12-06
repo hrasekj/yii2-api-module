@@ -5,7 +5,7 @@
  * @Last Modified by:   Jakub Hrášek
  */
 
-namespace api\controllers;
+namespace hrasekj\api\controllers;
 
 
 use Yii;

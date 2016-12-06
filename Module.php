@@ -3,10 +3,10 @@
  * @Author: Jakub Hrášek
  * @Date:   2016-11-21 11:21:53
  * @Last Modified by:   Jakub Hrášek
- * @Last Modified time: 2016-12-01 16:14:12
+ * @Last Modified time: 2016-12-06 08:53:50
  */
 
-namespace api;
+namespace hrasekj\api;
 
 
 use Yii;
@@ -30,6 +30,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
 	 */
 	public $modelNamespace;
 
+	/**
+	 * @var array urlManager rules
+	 */
+	public $rules = [];
+
 
 	/**
 	 * @inheritdoc
@@ -48,15 +53,21 @@ class Module extends \yii\base\Module implements BootstrapInterface
 	 */
 	public function bootstrap($app)
 	{
-		// urlManager rules
-		$app->getUrlManager()->addRules([
-			'GET /'.$this->id.'/<controller>/' => $this->id.'/<controller>/index',
-			'GET /'.$this->id.'/<controller>/<id:\d+>' => $this->id.'/<controller>/view',
-			'POST /'.$this->id.'/<controller>/' => $this->id.'/<controller>/create',
-			'PUT,PATCH /'.$this->id.'/<controller>/<id:\d+>' => $this->id.'/<controller>/update',
-			'DELETE /'.$this->id.'/<controller>/<id:\d+>' => $this->id.'/<controller>/delete',
-		]);
+		// default url rules
+		if (empty($this->rules)) {
+			$this->rules = [
+				'GET,HEAD /'.$this->id.'/<controller>/' => $this->id.'/<controller>/index',
+				'GET,HEAD /'.$this->id.'/<controller>/<id:\d+>' => $this->id.'/<controller>/view',
+				'POST /'.$this->id.'/<controller>/' => $this->id.'/<controller>/create',
+				'PUT,PATCH /'.$this->id.'/<controller>/<id:\d+>' => $this->id.'/<controller>/update',
+				'DELETE /'.$this->id.'/<controller>/<id:\d+>' => $this->id.'/<controller>/delete',
+			];
+		}
 
+		// urlManager rules
+		$app->getUrlManager()->addRules($this->rules);
+
+		// api error handling
 		$app->getResponse()->on('beforeSend', [$this, 'responseBeforeSend']);
 	}
 
@@ -68,8 +79,12 @@ class Module extends \yii\base\Module implements BootstrapInterface
 	{
 		$errorHandler = Yii::$app->getErrorHandler();
 		$response = $event->sender;
+		$request = Yii::$app->getRequest();
 
-		if ($errorHandler->exception !== null) {
+		$needle = $this->id.'/';
+		$haystack = $request->getPathInfo();
+
+		if ($errorHandler->exception !== null && substr($haystack, 0, strlen($needle)) === $needle) {
 			$response->format = Response::FORMAT_JSON;
 			$response->data = $this->convertExceptionToArray($errorHandler->exception);
 
