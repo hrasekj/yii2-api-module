@@ -3,7 +3,7 @@
  * @Author: Jakub Hrášek
  * @Date:   2016-11-21 11:21:53
  * @Last Modified by:   Jakub Hrášek
- * @Last Modified time: 2016-12-06 08:58:59
+ * @Last Modified time: 2016-12-06 09:04:41
  */
 
 namespace hrasekj\api;
@@ -55,17 +55,14 @@ class Module extends \yii\base\Module implements BootstrapInterface
 	{
 		// default url rules
 		if ($this->customRules === false) {
-			$this->rules = [
+			$app->getUrlManager()->addRules([
 				'GET,HEAD /'.$this->id.'/<controller>/' => $this->id.'/<controller>/index',
 				'GET,HEAD /'.$this->id.'/<controller>/<id:\d+>' => $this->id.'/<controller>/view',
 				'POST /'.$this->id.'/<controller>/' => $this->id.'/<controller>/create',
 				'PUT,PATCH /'.$this->id.'/<controller>/<id:\d+>' => $this->id.'/<controller>/update',
 				'DELETE /'.$this->id.'/<controller>/<id:\d+>' => $this->id.'/<controller>/delete',
-			];
+			]);
 		}
-
-		// urlManager rules
-		$app->getUrlManager()->addRules($this->rules);
 
 		// api error handling
 		$app->getResponse()->on('beforeSend', [$this, 'responseBeforeSend']);
