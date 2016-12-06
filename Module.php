@@ -3,7 +3,7 @@
  * @Author: Jakub Hrášek
  * @Date:   2016-11-21 11:21:53
  * @Last Modified by:   Jakub Hrášek
- * @Last Modified time: 2016-12-06 08:53:50
+ * @Last Modified time: 2016-12-06 08:58:59
  */
 
 namespace hrasekj\api;
@@ -31,9 +31,9 @@ class Module extends \yii\base\Module implements BootstrapInterface
 	public $modelNamespace;
 
 	/**
-	 * @var array urlManager rules
+	 * @var boolean if you want to use your own rules, se this to true
 	 */
-	public $rules = [];
+	public $customRules = false;
 
 
 	/**
@@ -54,7 +54,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 	public function bootstrap($app)
 	{
 		// default url rules
-		if (empty($this->rules)) {
+		if ($this->customRules === false) {
 			$this->rules = [
 				'GET,HEAD /'.$this->id.'/<controller>/' => $this->id.'/<controller>/index',
 				'GET,HEAD /'.$this->id.'/<controller>/<id:\d+>' => $this->id.'/<controller>/view',
